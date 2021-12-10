@@ -1,10 +1,18 @@
 const axios = require("axios");
+const papa = require('papaparse')
 module.exports = () => {
   const controller = {};
 
   controller.buscarDados = async (req, res) => {
     let dados = await buscarEspecies("Eichhornia azurea");
-    res.send(dados);
+    const parsed = papa.parse(dados, {
+      header: true,
+      dynamicTyping: true,
+      skipEmptyLines: true,
+    });
+
+    console.log(parsed);
+    res.send(parsed);
   };
 
   const buscarEspecies = async (nomeEspecie) => {

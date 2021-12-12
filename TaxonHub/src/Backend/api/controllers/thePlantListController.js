@@ -1,18 +1,18 @@
 const axios = require("axios");
-const papa = require('papaparse')
+const papa = require("papaparse");
 module.exports = () => {
   const controller = {};
 
   controller.buscarDados = async (req, res) => {
-    let dados = await buscarEspecies("Eichhornia azurea");
-    const parsed = papa.parse(dados, {
-      header: true,
-      dynamicTyping: true,
-      skipEmptyLines: true,
-    });
-
-    console.log(parsed);
-    res.send(parsed);
+    let resultados = [];
+    if (req.body.names !== undefined || req.body.names.length > 0) {
+      for (const nomeEspecie of req.body.names) {
+        let dados = await buscarEspecies(nomeEspecie);
+        const dadosFormatados = formatarDados(dados, nomeEspecie);
+        resultados = resultados.concat(dadosFormatados);
+      }
+    }
+    res.send(resultados);
   };
 
   const buscarEspecies = async (nomeEspecie) => {
@@ -29,15 +29,50 @@ module.exports = () => {
       })
       .catch((error) => {
         if (error.response) {
-          throw new Error(
-            `Website retornou com erro: ${error.response.status}`
-          );
+          throw new Error(`Erro na resposta: ${error.response.status}`);
         } else if (error.request) {
-          throw new Error(`Website request error: ${error.request}`);
+          throw new Error(`Erro na requisição: ${error.request}`);
         } else {
-          throw new Error(`Error in setting up the request: ${error.message}`);
+          throw new Error(
+            `Erro nas configurações da requisição: ${error.message}`
+          );
         }
       });
+  };
+
+  const formatarDados = (dados, nomeEspecie) => {
+    try {
+      const parse = papa.parse(dados, {
+        header: true,
+        dynamicTyping: true,
+        skipEmptyLines: true,
+      });
+      if (Object.keys(parse.errors).length !== 0) {
+        throw new Error("CSV Incorreto");
+      }
+
+      return CriarObjetoRetorno(parse, nomeEspecie);
+    } catch (error) {
+      throw new Error(`Erro formatação dos dados: ${error.message}`);
+    }
+
+    function CriarObjetoRetorno(parse, nomeEspecie) {
+      let nomeAceito = "";
+      return parse.data.map((row) => {
+        let nome =
+          row["Genus"] + " " + row["Species"] + " " + row["Authorship"];
+        if (row["Taxonomic status in TPL"] === "Accepted") nomeAceito = nome;
+
+        return {
+          nomePesquisado: nomeEspecie,
+          nomeRetornado: nome,
+          aceitoSinonimo: row["Taxonomic status in TPL"],
+          sinonimoDe: nomeAceito === nome ? null : nomeAceito,
+          baseDados: "TPL",
+          familia: row["Family"],
+        };
+      });
+    }
   };
 
   return controller;

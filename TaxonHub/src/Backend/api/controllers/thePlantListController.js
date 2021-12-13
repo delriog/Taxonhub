@@ -68,8 +68,9 @@ module.exports = () => {
         return {
           nomePesquisado: nomeEspecie,
           nomeRetornado: nome,
-          aceitoSinonimo: row["Taxonomic status in TPL"],
-          sinonimoDe: nomeAceito === nome ? null : nomeAceito,
+
+          aceitoSinonimo: row["Taxonomic status in TPL"] === "Accepted"? "nome_aceito": "sinonimo",
+          sinonimoDe: nomeAceito === nome ? "" : nomeAceito,
           baseDados: "TPL",
           familia: row["Family"],
         };

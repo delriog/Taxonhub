@@ -12,7 +12,6 @@ module.exports = () => {
 			.get("http://api.splink.org.br/records/format/json/institutionCode/USP/collectionCode/SPF/ScientificName/Rauvolfia%20sellowii/Cantinoa%20althaeifolia/StateProvince/São%20Paulo/Rio%20de%20Janeiro/Pernambuco/Synonyms/AlgaeBase", {
 			})
 			.then((response) => {
-				console.log(response.data)
 				return response.data;
 			})
 			.catch((error) => {

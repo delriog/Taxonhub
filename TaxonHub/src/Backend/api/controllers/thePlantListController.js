@@ -5,7 +5,8 @@ module.exports = () => {
 
   controller.buscarDados = async (req, res) => {
     let resultados = [];
-    if (req.body.names !== undefined || req.body.names.length > 0) {
+    console.log(req.body)
+    if (req.body !== undefined && req.body.names !== undefined && req.body.names.length > 0) {
       for (const nomeEspecie of req.body.names) {
         if (!isBlank(nomeEspecie)) {
           let dados = await buscarEspecies(nomeEspecie);

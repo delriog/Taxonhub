@@ -1,23 +1,25 @@
 {
-
-  "name": "Backend",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "nodemon server",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "Geovani",
-  "license": "ISC",
-  "dependencies": {
-    "axios": "^0.24.0",
+	"name": "Backend",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"start": "nodemon server",
+		"test": "jest"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"axios": "^0.24.0",
     "body-parser": "^1.19.1",
     "config": "^3.3.6",
     "consign": "^0.1.6",
     "express": "^4.17.1",
     "nodemon": "^2.0.15",
     "papaparse": "^5.3.1"
-  }
+	},
+	"devDependencies": {
+		"jest": "^27.4.4"
+	}
 }

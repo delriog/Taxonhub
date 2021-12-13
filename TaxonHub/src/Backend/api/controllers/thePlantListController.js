@@ -68,6 +68,7 @@ module.exports = () => {
         return {
           nomePesquisado: nomeEspecie,
           nomeRetornado: nome,
+
           aceitoSinonimo: row["Taxonomic status in TPL"] === "Accepted"? "nome_aceito": "sinonimo",
           sinonimoDe: nomeAceito === nome ? "" : nomeAceito,
           baseDados: "TPL",
@@ -76,10 +77,8 @@ module.exports = () => {
       });
     }
   };
-
   const isBlank = (str) => {
     return !str || /^\s*$/.test(str);
   };
-
   return controller;
 };

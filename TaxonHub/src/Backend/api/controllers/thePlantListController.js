@@ -7,9 +7,11 @@ module.exports = () => {
     let resultados = [];
     if (req.body.names !== undefined || req.body.names.length > 0) {
       for (const nomeEspecie of req.body.names) {
-        let dados = await buscarEspecies(nomeEspecie);
-        const dadosFormatados = formatarDados(dados, nomeEspecie);
-        resultados = resultados.concat(dadosFormatados);
+        if (!isBlank(nomeEspecie)) {
+          let dados = await buscarEspecies(nomeEspecie);
+          const dadosFormatados = formatarDados(dados, nomeEspecie);
+          resultados = resultados.concat(dadosFormatados);
+        }
       }
     }
     res.send(resultados);
@@ -73,6 +75,10 @@ module.exports = () => {
         };
       });
     }
+  };
+
+  const isBlank = (str) => {
+    return !str || /^\s*$/.test(str);
   };
 
   return controller;

@@ -13,7 +13,6 @@ module.exports = () => {
 		.then("routes")
 		.into(app);
 
-	require('../api/routes/speciesLinkRoute')(app);
 
 	return app;
 };

@@ -7,9 +7,11 @@ module.exports = () => {
     let resultados = [];
     if (req.body.names !== undefined || req.body.names.length > 0) {
       for (const nomeEspecie of req.body.names) {
-        let dados = await buscarEspecies(nomeEspecie);
-        const dadosFormatados = formatarDados(dados, nomeEspecie);
-        resultados = resultados.concat(dadosFormatados);
+        if (!isBlank(nomeEspecie)) {
+          let dados = await buscarEspecies(nomeEspecie);
+          const dadosFormatados = formatarDados(dados, nomeEspecie);
+          resultados = resultados.concat(dadosFormatados);
+        }
       }
     }
     res.send(resultados);
@@ -66,14 +68,17 @@ module.exports = () => {
         return {
           nomePesquisado: nomeEspecie,
           nomeRetornado: nome,
-          aceitoSinonimo: row["Taxonomic status in TPL"],
-          sinonimoDe: nomeAceito === nome ? null : nomeAceito,
+
+          aceitoSinonimo: row["Taxonomic status in TPL"] === "Accepted"? "nome_aceito": "sinonimo",
+          sinonimoDe: nomeAceito === nome ? "" : nomeAceito,
           baseDados: "TPL",
           familia: row["Family"],
         };
       });
     }
   };
-
+  const isBlank = (str) => {
+    return !str || /^\s*$/.test(str);
+  };
   return controller;
 };

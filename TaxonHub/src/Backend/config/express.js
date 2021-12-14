@@ -3,7 +3,6 @@ const bodyParser = require("body-parser");
 const config = require("config");
 const consign = require("consign");
 
-module.exports = () => {
   const app = express();
 
   app.set("port", process.env.PORT || config.get("server.port"));
@@ -25,5 +24,4 @@ module.exports = () => {
     .then("routes")
     .into(app);
 
-  return app;
-};
+module.exports = app;

@@ -17,9 +17,7 @@ module.exports = () => {
 			})
 			.catch((error) => {
 				if (error.response) {
-					throw new Error(
-					`Website retornou com erro: ${error.response.status}`
-				);
+					throw new Error(`Website retornou com erro: ${error.response.status}`);
 				} else if (error.request) {
 					throw new Error(`Website request error: ${error.request}`);
 				} else {
